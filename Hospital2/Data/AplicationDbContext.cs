@@ -1,9 +1,9 @@
-﻿using Hospital.Models;
-using Hospital2.Models;
+﻿using Hospital2.Models;
+
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 
-namespace Hospital.Data;
+namespace Hospital2.Data;
 
 public class AplicationDbContext : DbContext
 {

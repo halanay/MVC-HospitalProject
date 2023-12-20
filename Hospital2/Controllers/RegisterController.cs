@@ -1,30 +1,53 @@
-﻿using Hospital.Models;
+﻿using Hospital2.Data;
+using Hospital2.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
-namespace Hospital.Controllers;
+
+
+namespace Hospital2.Controllers;
 public class RegisterController : Controller
 {
-	private readonly ILogger<RegisterController> _logger;
 
-	public RegisterController(ILogger<RegisterController> logger)
+
+
+
+    private readonly AplicationDbContext _db;
+    
+    public RegisterController(AplicationDbContext db)
+    {
+        _db = db;
+    }
+
+    [HttpGet]
+    public IActionResult Index() {
+        return View();
+    }
+    [HttpPost]
+    //[ValidateAntiForgeryToken]
+    public IActionResult Index(User user)
 	{
-		_logger = logger;
-	}
+        if (ModelState.IsValid)
+        {
+           var newUser = new User
+                {
+                    
+                    //TC = user.TC,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    Password = user.Password,
+                };
 
-	public IActionResult RegisterHospital()
-	{
-		return View();
-	}
+                _db.Users.Add(newUser);
+                _db.SaveChanges();
 
-	//public IActionResult Privacy()
-	//{
-	//	return View();
-	//}
+            return RedirectToAction("Index", "Home");
 
-	//[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-	//public IActionResult Error()
-	//{
-	//	return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-	//}
+        }
+
+        //HttpContext.Session.SetString("UserId", user.Id.ToString());
+        return View(user);
+        ModelState.Clear();
+    }
 }

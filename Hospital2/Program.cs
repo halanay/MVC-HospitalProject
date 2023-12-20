@@ -1,4 +1,4 @@
-using Hospital.Data;
+using Hospital2.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
