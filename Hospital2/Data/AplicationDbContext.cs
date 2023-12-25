@@ -17,5 +17,6 @@ public class AplicationDbContext : DbContext
 
     public DbSet<Doktor> Doktors { get; set; }
 
+    public DbSet<AnaBilimDali> AnaBilimDalis   { get; set; }
 
 }

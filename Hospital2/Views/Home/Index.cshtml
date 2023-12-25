@@ -1,6 +1,9 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@{
+    var anabilimDaliList = ViewBag.AnaBilimDaliList as SelectList;
+}
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -12,6 +15,10 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-image: url('anasayfa.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
         }
 
         label {
@@ -41,37 +48,97 @@
     </style>
 </head>
 <body>
+    <div class="row justify-content-center">
 
-    <h2>Randevu Al</h2>
+        <div class="col-9 bg-opacity-50 bg-light rounded-3 p-4 ">
+            <h2>Randevu Al</h2>
 
-    <form action="randevu_kaydet.php" method="post">
-        <label for="doktor">Anabilim Dalı:</label>
-        <select id="AnabilimDali" name="AnaBilimDali">
-            <option value="1">A</option>
-            <option value="2">B</option>
-            <!-- Diğer doktorlar için gerekli seçenekleri ekleyebilirsiniz -->
-        </select>
-        <label for="doktor">Poliklinik:</label>
-        <select id="AnabilimDali" name="AnaBilimDali">
-            <option value="1">A</option>
-            <option value="2">B</option>
-            <!-- Diğer doktorlar için gerekli seçenekleri ekleyebilirsiniz -->
-        </select>
-        <label for="doktor">Doktor:</label>
-        <select id="doktor" name="doktor">
-            <option value="1">Dr. Ayşe</option>
-            <option value="2">Dr. Mehmet</option>
-            <!-- Diğer doktorlar için gerekli seçenekleri ekleyebilirsiniz -->
-        </select>
+            <form action="randevu_kaydet.php" method="post">
 
-        <label for="tarih">Tarih:</label>
-        <input type="date" id="tarih" name="tarih" required>
+                <label for="AnabilimDali">Anabilim Dalı:</label>
+                <select id="ddlAnabilimDali" name="AnabilimDali" class="form-control">
+                    <option value="">Seçiniz</option>
+                    @foreach (var item in anabilimDaliList)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                </select>
+                <label for="Poliklinik">Poliklinik:</label>
+                <select id="ddlPoliklinik" name="Poliklinik" class="form-control">
+                    <option value="">Seçiniz</option>
+                </select>
 
-        <label for="saat">Saat:</label>
-        <input type="time" id="saat" name="saat" required>
+                <label for="Doktor">Doktor:</label>
+                <select id="ddlDoktor" name="Doktor" class="form-control">
+                    <option value="">Seçiniz</option>
+                </select>
+                <label for="Tarih">Tarih:</label>
+                <input type="date" id="datepicker" class="form-control">
 
-        <button type="submit">Randevu Al</button>
-    </form>
+
+                <label for="Saat">Saat:</label>
+                <select id="ddlSaat" name="Saat" class="form-control">
+                    <option value="">Seçiniz</option>
+                </select>
+
+
+                <button type="submit">Randevu Al</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Anabilim Dalı seçildiğinde
+            $('#ddlAnabilimDali').change(function () {
+                var anabilimDaliId = $(this).val();
+
+                // AJAX ile ilgili poliklinikleri getir
+                $.getJSON('@Url.Action("GetPoliklinikList")', { anaBilimDaliId: anabilimDaliId }, function (data) {
+                    var items = '<option value="">Seçiniz</option>';
+                    $.each(data, function (i, poliklinik) {
+                        items += '<option value="' + poliklinik.value + '">' + poliklinik.text + '</option>';
+                    });
+                    $('#ddlPoliklinik').html(items);
+                });
+                if (anabilimDaliId !== "") {
+                    updatePoliklinikDropdown(anabilimDaliId);
+                }
+            });
+
+            // Poliklinik seçildiğinde
+            $('#ddlPoliklinik').change(function () {
+                var poliklinikId = $(this).val();
+
+                // AJAX ile ilgili doktorları getir
+                $.getJSON('@Url.Action("GetDoktorList")', { poliklinikId: poliklinikId }, function (data) {
+                    var items = '<option value="">Seçiniz</option>';
+                    $.each(data, function (i, doktor) {
+                        items += '<option value="' + doktor.value + '">' + doktor.text + '</option>';
+                    });
+                    $('#ddlDoktor').html(items);
+                });
+            });
+
+
+            // Doktorları ve ilk saatleri getir
+            $('#ddlDoktor').change(function () {
+                var doktorId = $(this).val();
+                var selectedDate = $('#datepicker').val();
+
+                // AJAX ile uygun saatleri getir
+                $.getJSON('@Url.Action("GetAvailableHours")', { selectedDate: selectedDate, doktorId: doktorId }, function (data) {
+                    var items = '<option value="">Seçiniz</option>';
+                    $.each(data, function (i, hour) {
+                        items += '<option value="' + hour + '">' + hour + '</option>';
+                    });
+                    $('#ddlSaat').html(items);
+                });
+            });
+
+        });
+    </script>
 
 </body>
 </html>

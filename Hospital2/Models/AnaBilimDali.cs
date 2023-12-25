@@ -6,7 +6,7 @@ namespace Hospital2.Models
     {
         public int AnaBilimDaliId { get; set; }
         [Required]
-        public int AnaBilimDaliName { get; set; }
+        public string? AnaBilimDaliName { get; set; }
         public List<Poliklinik> Polikliniks { get; } = new();
     }
 }
