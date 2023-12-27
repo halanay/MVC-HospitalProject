@@ -52,6 +52,7 @@ public class LoginController : Controller
             return View("Index", user);
         }
 
+
     }
     public IActionResult LogOut()
     {
