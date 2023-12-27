@@ -19,4 +19,6 @@ public class AplicationDbContext : DbContext
 
     public DbSet<AnaBilimDali> AnaBilimDalis   { get; set; }
 
+    public DbSet<Appointment> Appointments { get; set; }
+
 }

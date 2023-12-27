@@ -3,6 +3,7 @@ using Hospital2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital2.Migrations
 {
     [DbContext(typeof(AplicationDbContext))]
-    partial class AplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231227204828_appoitmentRemoved")]
+    partial class appoitmentRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,35 +38,6 @@ namespace Hospital2.Migrations
                     b.HasKey("AnaBilimDaliId");
 
                     b.ToTable("AnaBilimDalis");
-                });
-
-            modelBuilder.Entity("Hospital2.Models.Appointment", b =>
-                {
-                    b.Property<int>("AppointmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AppointmentId"), 1L, 1);
-
-                    b.Property<int>("Date")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DoktorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Hour")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("AppointmentId");
-
-                    b.HasIndex("DoktorId");
-
-                    b.HasIndex("Id");
-
-                    b.ToTable("Appointments");
                 });
 
             modelBuilder.Entity("Hospital2.Models.Doktor", b =>
@@ -158,25 +131,6 @@ namespace Hospital2.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Hospital2.Models.Appointment", b =>
-                {
-                    b.HasOne("Hospital2.Models.Doktor", "Doktor")
-                        .WithMany()
-                        .HasForeignKey("DoktorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hospital2.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doktor");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Hospital2.Models.Doktor", b =>

@@ -10,7 +10,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 rounded-3">
             <div class="container-fluid">
                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Randevularim">Randevular</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -24,10 +24,25 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Randevu Al</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="profil">Kişisel Bilgiler</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="profil" asp-route-id="@Context.Session.GetString("UserId")">Kişisel Bilgiler</a>
                         </li>
                     </ul>
                 </div>
+
+                @if (ViewBag.IsAuthenticated == true)
+                {
+                    <div>
+                        <span class="me-2" >Hoşgeldiniz  </span>
+                        <span class="me-5 fw-bold" style="font-size:20px">@Context.Session.GetString("UserName")</span>                        
+                    </div>
+                    <div class="uyegiris"><a class="btn btn-outline-danger rounded-3 text-info fw-bold border-2 px-2 py-1 mt-0" asp-area="" asp-controller="Login" asp-action="index">Çıkış Yap </a></div>
+                }
+                else
+                {
+
+                   
+                }
+                    
             </div>
         </nav>
     </header>

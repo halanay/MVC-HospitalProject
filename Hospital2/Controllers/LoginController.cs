@@ -15,20 +15,57 @@ public class LoginController : Controller
     [HttpGet]
     public IActionResult Index()
     {
+        if (HttpContext.Session.GetString("UserId") != null)
+        {
+            ViewBag.IsAuthenticated = true;
+        }
+        else
+        {
+            ViewBag.IsAuthenticated = false;
+        }
         return View();
+
     }
     [HttpPost]
     public IActionResult Index(User user)
     {
-        var UserFind = _db.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+        if (HttpContext.Session.GetString("UserId") != null)
+        {
+            ViewBag.IsAuthenticated = true;
+        }
+        else
+        {
+            ViewBag.IsAuthenticated = false;
+        }
 
-        if (UserFind != null) {
+
+        var UserFind = _db.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
+        if (UserFind != null)
+        {
+            HttpContext.Session.SetString("UserId", UserFind.Id.ToString());
+            HttpContext.Session.SetString("UserName", UserFind.UserName.ToString());
             return RedirectToAction("Index", "Home");
         }
-        else {
+        else
+        {
             ModelState.AddModelError(string.Empty, "Yanlış Kullanıcı Bilgisi");
-        return View("Index", user);
+            return View("Index", user);
         }
-        
+
+    }
+    public IActionResult LogOut()
+    {
+
+        HttpContext.Session.Remove("UserId");
+        if (HttpContext.Session.GetString("UserId") != null)
+        {
+            ViewBag.IsAuthenticated = true;
+        }
+        else
+        {
+            ViewBag.IsAuthenticated = false;
+        }
+        return RedirectToAction("Index", "Home");
+
     }
 }

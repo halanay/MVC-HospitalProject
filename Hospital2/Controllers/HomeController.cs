@@ -16,6 +16,16 @@ public class HomeController : Controller
     }
     public IActionResult Index()
     {
+
+        if (HttpContext.Session.GetString("UserId") != null)
+        {
+            ViewBag.IsAuthenticated = true;
+        }
+        else
+        {
+            ViewBag.IsAuthenticated = false;
+            return RedirectToAction("index", "login");
+        }
         var anabilimDallari = _db.AnaBilimDalis.ToList();
         ViewBag.AnaBilimDaliList = new SelectList(anabilimDallari, "AnaBilimDaliId", "AnaBilimDaliName");
         return View();
@@ -23,14 +33,30 @@ public class HomeController : Controller
 
     public IActionResult Randevularim()
     {
+        if (HttpContext.Session.GetString("UserId") != null)
+        {
+            ViewBag.IsAuthenticated = true;
+        }
+        else
+        {
+            ViewBag.IsAuthenticated = false;
+        }
 
         return View();
 
     }
-    public IActionResult Profil()
+    public IActionResult Profil(int id)
     {
-
-        return View();
+        if (HttpContext.Session.GetString("UserId") != null)
+        {
+            ViewBag.IsAuthenticated = true;
+        }
+        else
+        {
+            ViewBag.IsAuthenticated = false;
+        }
+        User user = _db.Users.Where(u => u.Id == id).FirstOrDefault();
+        return View(user);
 
     }
 
