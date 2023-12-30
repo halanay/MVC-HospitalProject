@@ -21,4 +21,6 @@ public class AplicationDbContext : DbContext
 
     public DbSet<Appointment> Appointments { get; set; }
 
+    public DbSet<Admin> Admins { get; set; }
+
 }

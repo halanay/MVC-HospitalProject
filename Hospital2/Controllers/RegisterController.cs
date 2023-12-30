@@ -44,10 +44,10 @@ public class RegisterController : Controller
             return RedirectToAction("Index", "Home");
 
         }
-
+        ModelState.Clear();
         //HttpContext.Session.SetString("UserId", user.Id.ToString());
         return View(user);
-        ModelState.Clear();
+        
     }
     [HttpPost]
     public IActionResult ProfilUpdate(User updatedUser)
