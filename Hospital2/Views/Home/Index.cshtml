@@ -4,7 +4,7 @@
 @{
     var anabilimDaliList = ViewBag.AnaBilimDaliList as SelectList;
 }
-
+@model Hospital2.Models.AppointmentModel
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -52,8 +52,19 @@
 
         <div class="col-9 bg-opacity-50 bg-light rounded-3 p-4 ">
             <h2>Randevu Al</h2>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div id="successMessage" class="alert alert-success">
+                    @TempData["SuccessMessage"]
+                </div>
 
-            <form action="randevu_kaydet.php" method="post">
+                <script>
+                    setTimeout(function () {
+                        $("#successMessage").fadeOut("slow");
+                    }, 5000); // Mesajın 5 saniye sonra kaybolmasını sağlar
+                </script>
+            }
+            <form asp-action="SaveAppointment" asp-controller="Home" method="post">
 
                 <label for="AnabilimDali">Anabilim Dalı:</label>
                 <select id="ddlAnabilimDali" name="AnabilimDali" class="form-control">
@@ -69,15 +80,15 @@
                 </select>
 
                 <label for="Doktor">Doktor:</label>
-                <select id="ddlDoktor" name="Doktor" class="form-control">
+                <select id="ddlDoktor" name="DoktorId" class="form-control">
                     <option value="">Seçiniz</option>
                 </select>
                 <label for="Tarih">Tarih:</label>
-                <input type="date" id="datepicker" class="form-control">
+                <input type="date" id="datepicker" name="Date"class="form-control">
 
 
                 <label for="Saat">Saat:</label>
-                <select id="ddlSaat" name="Saat" class="form-control">
+                <select id="ddlSaat" name="Hour" class="form-control">
                     <option value="">Seçiniz</option>
                 </select>
 
@@ -86,7 +97,7 @@
             </form>
         </div>
     </div>
-
+    
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -122,9 +133,9 @@
             });
 
 
-            // Doktorları ve ilk saatleri getir
-            $('#ddlDoktor').change(function () {
-                var doktorId = $(this).val();
+            // tarih seçince ve ilk saatleri getir
+            $('#datepicker').change(function () {
+                var doktorId = $('#ddlDoktor').val();
                 var selectedDate = $('#datepicker').val();
 
                 // AJAX ile uygun saatleri getir

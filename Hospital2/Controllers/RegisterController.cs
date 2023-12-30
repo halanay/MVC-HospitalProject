@@ -11,9 +11,6 @@ namespace Hospital2.Controllers;
 public class RegisterController : Controller
 {
 
-
-
-
     private readonly AplicationDbContext _db;
 
     public RegisterController(AplicationDbContext db)

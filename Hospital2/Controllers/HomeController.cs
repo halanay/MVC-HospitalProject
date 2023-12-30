@@ -2,7 +2,9 @@
 using Hospital2.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Hospital2.Controllers;
 public class HomeController : Controller
@@ -17,7 +19,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
 
-        if (HttpContext.Session.GetString("UserId") != null)
+        if (HttpContext.Session.GetInt32("UserId") != null)
         {
             ViewBag.IsAuthenticated = true;
         }
@@ -33,9 +35,20 @@ public class HomeController : Controller
 
     public IActionResult Randevularim()
     {
-        if (HttpContext.Session.GetString("UserId") != null)
+        if (HttpContext.Session.GetInt32("UserId") != null)
         {
             ViewBag.IsAuthenticated = true;
+
+            var appointments = _db.Appointments
+                .Where(a => a.UserId == HttpContext.Session.GetInt32("UserId"))
+                .Join(_db.Doktors, a => a.DoktorId, d => d.DoktorId, (appointment, doctor) => new { Appointment = appointment, Doctor = doctor })
+                .Join(_db.Polikliniks, d => d.Doctor.PoliklinikId, p => p.PoliklinikId, (d, poliklinik) => new AppointmentViewModel { Appointment = d.Appointment, Doktor = d.Doctor, Poliklinik = poliklinik })
+                .OrderBy(a => a.Appointment.Date)
+                .ToList();
+
+            return View(appointments);
+
+          
         }
         else
         {
@@ -47,16 +60,20 @@ public class HomeController : Controller
     }
     public IActionResult Profil(int id)
     {
-        if (HttpContext.Session.GetString("UserId") != null)
+        if (HttpContext.Session.GetInt32("UserId") != null)
         {
             ViewBag.IsAuthenticated = true;
+            User? user = _db.Users.Where(u => u.Id == id).FirstOrDefault();
+            if (user != null) {
+                return View(user);
+            }
+
         }
         else
         {
             ViewBag.IsAuthenticated = false;
         }
-        User user = _db.Users.Where(u => u.Id == id).FirstOrDefault();
-        return View(user);
+        return View();
 
     }
 
@@ -78,15 +95,48 @@ public class HomeController : Controller
 
     public JsonResult GetAvailableHours(DateTime selectedDate, int doktorId)
     {
+        var availableHours = _db.Appointments
+            .Where(a => a.DoktorId == doktorId && a.Date == selectedDate)
+            .Select(a => a.Hour.ToString("hh\\:mm"))
+            .ToList();
 
-
-        var availableHours = new List<string>
+        var allHours = new List<string>
     {
-        "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00",
+        "08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00"
     };
-
-        return Json(availableHours);
+        var availableHoursList = allHours.Except(availableHours).ToList();
+        return new JsonResult(availableHoursList);
     }
+
+
+    [HttpPost]
+    public ActionResult SaveAppointment(AppointmentModel appointmentModel)
+    {
+        var userId=0;
+        if (HttpContext.Session.GetInt32("UserId") != null)
+        {
+             userId=Convert.ToInt32(HttpContext.Session.GetInt32("UserId"));
+        }
+        Appointment newAppointment = new()
+        {
+            Hour = appointmentModel.Hour,
+            Date = appointmentModel.Date,
+            DoktorId = appointmentModel.DoktorId,
+            UserId = userId,
+        };
+        if (ModelState.IsValid)
+        {
+            // Model geçerliyse, veritabanına ekleme işlemini gerçekleştir
+            _db.Appointments.Add(newAppointment);
+            _db.SaveChanges();
+            TempData["SuccessMessage"] = "Kayıt işlemi başarıyla tamamlandı.";
+            return RedirectToAction("Index");
+        }
+
+        // Geçerli değilse, formu aynı sayfada tekrar gösterme
+        return View("Index", appointmentModel);
+    }
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

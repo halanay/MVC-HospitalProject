@@ -3,4 +3,38 @@
 *@
 @{
 }
-<h1>Randevular</h1>
+@model List<Hospital2.Models.AppointmentViewModel>
+<head>
+    <style>
+        body {
+            margin: 20px
+        }</style>
+</head>
+<h1 class="mt-1">Randevularım</h1>
+
+<table class="table mt-5 p-5 ">
+    <thead class="thead-dark">
+        <tr class="alert-info ">
+            <th scope="col">Tarih</th>
+            <th scope="col">Saat</th>
+            <th scope="col">Doktor</th>
+            <th scope="col">Poliklinik</th>
+            <th scope="col">Durumu</th>
+             
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr @(appointment.Appointment.Date < DateTime.Today && DateTime.Today.Add(appointment.Appointment.Hour) < DateTime.Now ? "class=btn-outline-warning" : "class=btn-outline-success")>
+                <td>@appointment.Appointment.Date.ToString("yyyy-MM-dd")</td>
+                <td>@DateTime.Today.Add(appointment.Appointment.Hour).ToString("HH:mm")</td>
+                <td>@appointment.Appointment.Doktor.DoktarAdi</td>
+                <td>@appointment.Appointment.Doktor.Poliklinik.PoliklinikIsmi</td>
+                <td @(appointment.Appointment.Date < DateTime.Today && DateTime.Today.Add(appointment.Appointment.Hour) < DateTime.Now ? "class=alert-danger" : "class=btn-outline-success")>@(appointment.Appointment.Date < DateTime.Today && DateTime.Today.Add(appointment.Appointment.Hour) < DateTime.Now ? "Geçmiş" : "Aktif")</td>
+               
+
+            </tr>
+        }
+    </tbody>
+</table>

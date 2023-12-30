@@ -9,20 +9,18 @@ namespace Hospital2.Models
         [Key]
         public int AppointmentId { get; set; }
 
-
         [ForeignKey("Doktor")]
         public int DoktorId { get; set; }
         public Doktor Doktor { get; set; }
-
       
         [ForeignKey("User")]
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
+        [Required]
+        public TimeSpan Hour { get; set; }
 
-        public int Date { get; set; }
-        public int Hour { get; set; }
-
-        
 
     }
 }

@@ -15,7 +15,7 @@ public class LoginController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        if (HttpContext.Session.GetString("UserId") != null)
+        if (HttpContext.Session.GetInt32("UserId") != null)
         {
             ViewBag.IsAuthenticated = true;
         }
@@ -29,7 +29,7 @@ public class LoginController : Controller
     [HttpPost]
     public IActionResult Index(User user)
     {
-        if (HttpContext.Session.GetString("UserId") != null)
+        if (HttpContext.Session.GetInt32("UserId") != null)
         {
             ViewBag.IsAuthenticated = true;
         }
@@ -42,7 +42,7 @@ public class LoginController : Controller
         var UserFind = _db.Users.FirstOrDefault(u => u.UserName == user.UserName && u.Password == user.Password);
         if (UserFind != null)
         {
-            HttpContext.Session.SetString("UserId", UserFind.Id.ToString());
+            HttpContext.Session.SetInt32("UserId", UserFind.Id);
             HttpContext.Session.SetString("UserName", UserFind.UserName.ToString());
             return RedirectToAction("Index", "Home");
         }
@@ -58,7 +58,7 @@ public class LoginController : Controller
     {
 
         HttpContext.Session.Remove("UserId");
-        if (HttpContext.Session.GetString("UserId") != null)
+        if (HttpContext.Session.GetInt32("UserId") != null)
         {
             ViewBag.IsAuthenticated = true;
         }
