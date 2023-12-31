@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Hospital2.Models.AnaBilimDali>
+
+@{
+    ViewData["Title"] = "AnaBilimDaliList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Ana Bilim Dalı Listesi</h1>
+
+<p>
+    <a asp-action="Create">Yeni Ana Bilim Dalı Oluştur</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.AnaBilimDaliName)*@
+                Ana Bilim Dalı Adı
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnaBilimDaliName)
+            </td>
+            <td>
+                    <a asp-action="AnaBilimDaliEdit" asp-route-id="@item.AnaBilimDaliId">Güncelle</a> |
+                
+                    <a asp-action="AnaBilimDaliDelete" asp-route-id="@item.AnaBilimDaliId">Sil</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

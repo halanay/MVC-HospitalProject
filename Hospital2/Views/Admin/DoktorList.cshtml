@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Hospital2.Models.Doktor>
+
+@{
+    ViewData["Title"] = "DoktorList";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Doktor Listesi</h1>
+
+<p>
+    <a asp-action="Create">Yeni Doktor Oluştur</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.DoktarAdi)*@
+                Doktor Adı
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Poliklinik)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoktarAdi)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Poliklinik.PoliklinikIsmi)
+            </td>
+            <td>
+                <a asp-action="DoktorEdit" asp-route-id="@item.DoktorId">Güncelle</a> |
+                
+                <a asp-action="DoktorDelete" asp-route-id="@item.DoktorId">Sil</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

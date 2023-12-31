@@ -7,11 +7,9 @@
     ViewData["Title"] = "UserEdit";
 }
 
-<h1>UserEdit</h1>
+<h1>Kayıtlı Hastalar</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -19,16 +17,19 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @* @Html.DisplayNameFor(model => model.UserName) *@
+                Hasta Adı Soyadı
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                @*@Html.DisplayNameFor(model => model.Password) *@
+                Şifre
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Cinsiyet)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DogumTarihi)
+                @*@Html.DisplayNameFor(model => model.DogumTarihi) *@
+                Doğum Tarihi
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Adres)
@@ -76,9 +77,9 @@
                 @Html.DisplayFor(modelItem => item.Kilo)
             </td>
             <td>
-                <a asp-action="UserEdit" asp-route-id="@item.Id">Kullanıcı Güncelle</a> 
+                <a asp-action="UserEdit" asp-route-id="@item.Id">Güncelle</a> |
                 
-                <a asp-action="UserDelete" asp-route-id="@item.Id">Kullanıcı Sil</a>
+                <a asp-action="UserDelete" asp-route-id="@item.Id">Sil</a>
             </td>
         </tr>
 }

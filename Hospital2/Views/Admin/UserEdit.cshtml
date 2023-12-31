@@ -5,9 +5,9 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>UserEdit</h1>
+<h1>Kullanıcı Güncelle</h1>
 
-<h4>User</h4>
+<h4>Kullanıcı</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -60,13 +60,13 @@
                 <span asp-validation-for="Kilo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Güncelle" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="UserList">Geri Dön</a>
 </div>
 
