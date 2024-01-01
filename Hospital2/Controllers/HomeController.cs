@@ -10,9 +10,9 @@ namespace Hospital2.Controllers;
 public class HomeController : Controller
 {
 
-    private readonly AplicationDbContext _db;
+    private readonly ApplicationDbContext _db;
 
-    public HomeController(AplicationDbContext db)
+    public HomeController(ApplicationDbContext db)
     {
         _db = db;
     }

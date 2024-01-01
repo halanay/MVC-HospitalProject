@@ -7,9 +7,9 @@ namespace Hospital2.Controllers
     public class ApiController : Controller
     {
 
-        private readonly AplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
 
-        public ApiController(AplicationDbContext db)
+        public ApiController(ApplicationDbContext db)
         {
             _db = db;
         }

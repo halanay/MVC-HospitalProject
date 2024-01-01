@@ -7,9 +7,9 @@ namespace Hospital.Controllers;
 public class LoginController : Controller
 {
 
-    private readonly AplicationDbContext _db;
+    private readonly ApplicationDbContext _db;
 
-    public LoginController(AplicationDbContext db)
+    public LoginController(ApplicationDbContext db)
     {
         _db = db;
     }

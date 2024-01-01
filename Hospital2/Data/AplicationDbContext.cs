@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Hospital2.Data;
 
-public class AplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext
 {
-    public AplicationDbContext(DbContextOptions<AplicationDbContext> options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
 

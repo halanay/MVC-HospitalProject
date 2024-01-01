@@ -1,7 +1,7 @@
-﻿@model IEnumerable<Hospital2.Models.Poliklinik>
+﻿@model IEnumerable<Hospital2.Models.AnabilimDaliPoliklinikViewModel>
 
 @{
-    ViewData["Title"] = "PoliklinikList";
+    ViewData["Title"] = "Poliklinikler";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
@@ -33,7 +33,7 @@
                 @Html.DisplayFor(modelItem => item.PoliklinikIsmi)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AnaBilimDali.AnaBilimDaliName)
+                @Html.DisplayFor(modelItem => item.AnaBilimDaliName)
             </td>
             <td>
                     <a class="btn btn-outline-success"  asp-action="PoliklinikEdit" asp-route-id="@item.PoliklinikId">Güncelle</a> 

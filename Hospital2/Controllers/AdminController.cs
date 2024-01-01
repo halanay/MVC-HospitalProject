@@ -8,16 +8,16 @@ namespace Hospital2.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly AplicationDbContext _db;
+        private readonly ApplicationDbContext _db;
 
-        public AdminController(AplicationDbContext db)
+        public AdminController(ApplicationDbContext db)
         {
             _db = db;
         }
         // *** Kullanıcı (Hasta) Liste Sayfası Başladı ***  
         public IActionResult UserList()
         {
-            List<User> users = _db.Users.Where(u=>u.Role != "admin").ToList();
+            List<User> users = _db.Users.ToList();
 
             return View(users);
         }
@@ -71,8 +71,20 @@ namespace Hospital2.Controllers
         // *** Doktor Liste Sayfası Başladı ***  
         public IActionResult DoktorList()
         {
-            List<Doktor> doktors = _db.Doktors.ToList();
-            return View(doktors);
+
+         var result = from doktor in _db.Doktors
+                         join poliklinik in _db.Polikliniks on doktor.PoliklinikId equals poliklinik.PoliklinikId
+                         select new DoktorPoliklinikViewModel
+                         {
+                             DoktorId = doktor.DoktorId,
+                             DoktarAdi = doktor.DoktarAdi,
+                             PoliklinikId = poliklinik.PoliklinikId,
+                             PoliklinikIsmi = poliklinik.PoliklinikIsmi
+                         };
+
+            return View(result.ToList());
+
+            
         }
         // *** Doktor Liste Sayfası Bitti *** 
 
@@ -81,6 +93,7 @@ namespace Hospital2.Controllers
         {
             Doktor doktoredit = _db.Doktors.FirstOrDefault(x => x.DoktorId == id);
 
+            ViewBag.PoliklinikList = new SelectList(_db.Polikliniks, "PoliklinikId", "PoliklinikIsmi");
 
             return View(doktoredit);
         }
@@ -94,13 +107,14 @@ namespace Hospital2.Controllers
             {
                 // Doktoru güncelle
                 existingDoktor.DoktarAdi = updatedDoktor.DoktarAdi;
-                existingDoktor.Poliklinik = updatedDoktor.Poliklinik;  
+                existingDoktor.PoliklinikId = updatedDoktor.PoliklinikId;  
                 
 
                 _db.SaveChanges();
             }
             return RedirectToAction("DoktorList", "Admin", new { id = updatedDoktor.DoktorId });
         }
+       // ViewBag.AnabilimDaliList = new SelectList(_db.AnaBilimDalis, "AnaBilimDaliId", "AnaBilimDaliName");
 
         public IActionResult DoktorDelete(int id)
         {
@@ -124,7 +138,7 @@ namespace Hospital2.Controllers
            
                 _db.Doktors.Add(yeniDoktor);
                 _db.SaveChanges();
-                return RedirectToAction("DoktorCreate", "Admin");
+                return RedirectToAction("DoktorList", "Admin");
             
             
         }
@@ -202,7 +216,7 @@ namespace Hospital2.Controllers
 
             _db.AnaBilimDalis.Add(anaBilimDali);
             _db.SaveChanges();
-            return RedirectToAction("AnaBilimDaliCreate", "Admin");
+            return RedirectToAction("AnaBilimDaliList", "Admin");
 
 
         }
@@ -213,8 +227,18 @@ namespace Hospital2.Controllers
         // *** Poliklinik Liste Sayfası Başladı ***  
         public IActionResult PoliklinikList()
         {
-            List<Poliklinik> poliklinik = _db.Polikliniks.ToList();
-            return View(poliklinik);
+
+            var result = from anaBilimDali in _db.AnaBilimDalis
+                         join poliklinik in _db.Polikliniks on anaBilimDali.AnaBilimDaliId equals poliklinik.AnaBilimDaliId
+                         select new AnabilimDaliPoliklinikViewModel
+                         {
+                             AnaBilimDaliId = anaBilimDali.AnaBilimDaliId,
+                             AnaBilimDaliName = anaBilimDali.AnaBilimDaliName,
+                             PoliklinikId = poliklinik.PoliklinikId,
+                             PoliklinikIsmi = poliklinik.PoliklinikIsmi
+                         };
+            return View(result.ToList());
+
         }
         // *** Poliklinik Liste Sayfası Bitti *** 
 
@@ -222,7 +246,7 @@ namespace Hospital2.Controllers
         public IActionResult PoliklinikEdit(int id)
         {
             Poliklinik poliklinikedit = _db.Polikliniks.FirstOrDefault(x => x.PoliklinikId == id);
-
+            ViewBag.AnaBilimDaliList = new SelectList(_db.AnaBilimDalis, "AnaBilimDaliId", "AnaBilimDaliName");
 
             return View(poliklinikedit);
         }
@@ -267,7 +291,7 @@ namespace Hospital2.Controllers
 
             _db.Polikliniks.Add(yeniPoliklinik);
             _db.SaveChanges();
-            return RedirectToAction("PoliklinikCreate", "Admin");
+            return RedirectToAction("PoliklinikList", "Admin");
 
 
         }
