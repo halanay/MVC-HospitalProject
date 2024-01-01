@@ -1,6 +1,8 @@
 ﻿using Hospital2.Data;
 using Hospital2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital2.Controllers
 {
@@ -15,7 +17,8 @@ namespace Hospital2.Controllers
         // *** Kullanıcı (Hasta) Liste Sayfası Başladı ***  
         public IActionResult UserList()
         {
-            List<User> users = _db.Users.ToList();
+            List<User> users = _db.Users.Where(u=>u.Role != "admin").ToList();
+
             return View(users);
         }
         // *** Kullanıcı (Hasta) Liste Sayfası Bitti *** 
@@ -34,6 +37,7 @@ namespace Hospital2.Controllers
         {
             var existingUser = _db.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
 
+            
             if (existingUser != null)
             {
                 // Kullanıcıyı güncelle
@@ -107,6 +111,23 @@ namespace Hospital2.Controllers
 
             return RedirectToAction("DoktorList", "Admin");
         }
+        [HttpGet]
+        public IActionResult DoktorCreate()
+        {
+            ViewBag.PoliklinikList = new SelectList(_db.Polikliniks, "PoliklinikId", "PoliklinikIsmi");
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult DoktorCreate(Doktor yeniDoktor)
+        {
+           
+                _db.Doktors.Add(yeniDoktor);
+                _db.SaveChanges();
+                return RedirectToAction("DoktorList", "Admin");
+            
+            
+        }
         /*
         [HttpPost]
         public IActionResult DoktorCreate(Doktor yeniDoktor)
@@ -168,22 +189,23 @@ namespace Hospital2.Controllers
 
             return RedirectToAction("AnaBilimDaliList", "Admin");
         }
-        /*
-        [HttpPost]
-        public IActionResult DoktorCreate(Doktor yeniDoktor)
+        [HttpGet]
+        public IActionResult AnabilimDaliCreate()
         {
-            if (ModelState.IsValid)
-            {
-                _db.Doktors.Add(yeniDoktor);
-                _db.SaveChanges();
-
-                return RedirectToAction("DoktorList", "Admin");
-            }
-
-            // Eğer model doğrulama başarısız olursa, hata mesajlarıyla birlikte aynı sayfaya dönün
-            return View(yeniDoktor);
+            
+            return View();
         }
-        */
+
+        [HttpPost]
+        public IActionResult AnabilimDaliCreate(AnaBilimDali anaBilimDali)
+        {
+
+            _db.AnaBilimDalis.Add(anaBilimDali);
+            _db.SaveChanges();
+            return RedirectToAction("AnaBilimDaliList", "Admin");
+
+
+        }
         // *** AnaBilimDali Bilgilerini Güncelle/Ekle/Sil Bitti *** 
 
 
@@ -231,22 +253,25 @@ namespace Hospital2.Controllers
 
             return RedirectToAction("PoliklinikList", "Admin");
         }
-        /*
-        [HttpPost]
-        public IActionResult DoktorCreate(Doktor yeniDoktor)
+
+        [HttpGet]
+        public IActionResult PoliklinikCreate()
         {
-            if (ModelState.IsValid)
-            {
-                _db.Doktors.Add(yeniDoktor);
-                _db.SaveChanges();
-
-                return RedirectToAction("DoktorList", "Admin");
-            }
-
-            // Eğer model doğrulama başarısız olursa, hata mesajlarıyla birlikte aynı sayfaya dönün
-            return View(yeniDoktor);
+            ViewBag.AnabilimDaliList = new SelectList(_db.AnaBilimDalis, "AnaBilimDaliId", "AnaBilimDaliName");
+            return View();
         }
-        */
+
+        [HttpPost]
+        public IActionResult PoliklinikCreate(Poliklinik yeniPoliklinik)
+        {
+
+            _db.Polikliniks.Add(yeniPoliklinik);
+            _db.SaveChanges();
+            return RedirectToAction("PoliklinikList", "Admin");
+
+
+        }
+
         // *** Poliklinik Bilgilerini Güncelle/Ekle/Sil Bitti *** 
 
 

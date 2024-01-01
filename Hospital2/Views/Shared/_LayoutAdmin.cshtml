@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Hospital2.styles.css" asp-append-version="true" />
+    <style>
+        /* Add hover effect for navigation items */
+        .navbar-nav .nav-item:hover .nav-link {
+            font-weight: bold;
+            
+        }
+    </style>
 
 </head>
 <body>
@@ -15,7 +22,7 @@
             <div class="container-fluid">
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        <li class="nav-item ">
 
                             <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="UserList">Kullanıcılar</a>
                         </li>
@@ -38,9 +45,9 @@
                 {
                     <div>
                         <span class="me-2" >Hoşgeldiniz  </span>
-                        <span class="me-5 fw-bold" style="font-size:20px">@Context.Session.GetString("AdminName")</span>                        
+                        <span class="me-5 fw-bold" style="font-size:20px">@Context.Session.GetString("UserName")</span>                        
                     </div>
-                    <div class="uyegiris"><a class="btn btn-outline-danger rounded-3 text-info fw-bold border-2 px-2 py-1 mt-0" asp-area="" asp-controller="Admin" asp-action="index">Çıkış Yap </a></div>
+                    <div class="uyegiris"><a class="btn btn-outline-danger rounded-3 text-info fw-bold border-2 px-2 py-1 mt-0" asp-area="" asp-controller="Login" asp-action="index">Çıkış Yap </a></div>
                 }
                 else
                 {
@@ -60,7 +67,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - Hastane Randevu Sistemi - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - Hastane Randevu Sistemi - Admin Paneli 
         </div>
     </footer>
 

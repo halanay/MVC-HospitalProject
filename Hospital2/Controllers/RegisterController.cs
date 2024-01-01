@@ -32,7 +32,7 @@ public class RegisterController : Controller
             var newUser = new User
             {
 
-                //TC = user.TC,
+                Role = "user",
                 UserName = user.UserName,
                 Email = user.Email,
                 Password = user.Password,

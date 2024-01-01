@@ -1,5 +1,6 @@
 ﻿using Hospital2.Data;
 using Hospital2.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hospital.Controllers;
@@ -44,6 +45,10 @@ public class LoginController : Controller
         {
             HttpContext.Session.SetInt32("UserId", UserFind.Id);
             HttpContext.Session.SetString("UserName", UserFind.UserName.ToString());
+            if(UserFind.Role == "admin")
+            {
+                return RedirectToAction("UserList", "Admin");
+            }
             return RedirectToAction("Index", "Home");
         }
         else

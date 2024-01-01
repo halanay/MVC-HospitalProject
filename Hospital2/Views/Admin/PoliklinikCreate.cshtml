@@ -1,0 +1,43 @@
+﻿@model Hospital2.Models.Poliklinik
+
+@{
+    ViewData["Title"] = "PoliklinikCreate";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Poliklinik Oluştur</h1>
+
+
+<hr />
+<div class="row justify-content-center  mt-5">
+    <div class="col-md-4">
+        <form asp-action="PoliklinikCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PoliklinikIsmi" class="control-label">Poliklinik Adı</label>
+                <input asp-for="PoliklinikIsmi" class="form-control" />
+                <span asp-validation-for="PoliklinikIsmi" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2 ">
+                <label asp-for="AnaBilimDali" class="control-label">Anabilim Dalı</label>
+                <select asp-for="AnaBilimDaliId" class="form-control" asp-items="ViewBag.AnabilimDaliList"><option value="">Anabilim Dalı Seç</option></select>
+                <span asp-validation-for="AnaBilimDaliId" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group mt-2">
+                
+                <input type="submit" value="Ekle" class="btn btn-primary  w-100" />
+            </div>
+        </form>
+        <div class="mt-3">
+            <a asp-action="PoliklinikList">Geri Dön</a>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
