@@ -124,7 +124,7 @@ namespace Hospital2.Controllers
            
                 _db.Doktors.Add(yeniDoktor);
                 _db.SaveChanges();
-                return RedirectToAction("DoktorList", "Admin");
+                return RedirectToAction("DoktorCreate", "Admin");
             
             
         }
@@ -202,7 +202,7 @@ namespace Hospital2.Controllers
 
             _db.AnaBilimDalis.Add(anaBilimDali);
             _db.SaveChanges();
-            return RedirectToAction("AnaBilimDaliList", "Admin");
+            return RedirectToAction("AnaBilimDaliCreate", "Admin");
 
 
         }
@@ -267,7 +267,7 @@ namespace Hospital2.Controllers
 
             _db.Polikliniks.Add(yeniPoliklinik);
             _db.SaveChanges();
-            return RedirectToAction("PoliklinikList", "Admin");
+            return RedirectToAction("PoliklinikCreate", "Admin");
 
 
         }
